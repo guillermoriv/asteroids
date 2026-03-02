@@ -5,9 +5,9 @@ class CircleShape(pygame.sprite.Sprite):
     containers: tuple[pygame.sprite.Group, ...]
     position: pygame.Vector2
     velocity: pygame.Vector2
-    radius: float
+    radius: int
 
-    def __init__(self, x: float, y: float, radius: float) -> None:
+    def __init__(self, x: int, y: int, radius: int):
         if hasattr(self, "containers"):
             super().__init__(*self.containers)
         else:
