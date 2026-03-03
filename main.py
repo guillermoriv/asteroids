@@ -1,5 +1,7 @@
 import pygame
 
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 from player import Player
 from logger import log_state
@@ -12,7 +14,16 @@ def main():
     running = True
     dt = 0
 
-    player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+    asteroids = pygame.sprite.Group()
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+
+    AsteroidField.containers = (updatable,)
+    Asteroid.containers = (asteroids, updatable, drawable)
+    Player.containers = (updatable, drawable)
+
+    Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    AsteroidField()
 
     while running:
         log_state()
@@ -20,8 +31,12 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
+        updatable.update(dt)
+
         screen.fill("black")
-        player.draw(screen)
+
+        for obj in drawable:
+            obj.draw(screen)
 
         pygame.display.flip()
         dt = clock.tick(60) / 1000  # 60FPS -> convert to seconds from milliseconds
